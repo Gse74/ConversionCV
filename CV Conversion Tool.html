@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Conversion Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .drop-zone {
+            border: 2px dashed #3b82f6;
+            transition: all 0.3s ease;
+        }
+        .drop-zone.active {
+            border-color: #10b981;
+            background-color: #f0f9ff;
+        }
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        .floating-label {
+            top: -0.75rem;
+            left: 0.75rem;
+            font-size: 0.75rem;
+            background: white;
+            padding: 0 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <!-- Header -->
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-bold text-blue-600 mb-2">CV Conversion Tool</h1>
+            <p class="text-lg text-gray-600">Transform your personal CV into our standardized company format</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- Upload Section -->
+            <section id="upload-section" class="p-8 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Upload Your CV</h2>
+                <p class="text-gray-600 mb-6">Supported formats: .doc, .docx, .pdf</p>
+                
+                <div class="drop-zone rounded-lg p-12 text-center cursor-pointer mb-6 relative" 
+                     id="dropZone">
+                    <i class="fas fa-file-upload text-5xl text-blue-500 mb-4"></i>
+                    <p class="text-lg font-medium text-gray-700">Drag & drop your CV file here</p>
+                    <p class="text-gray-500 mt-2">or click to browse files</p>
+                    <input type="file" id="fileInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+                           accept=".doc,.docx,.pdf" />
+                </div>
+                
+                <div class="flex justify-center space-x-4">
+                    <button id="cancelBtn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors disabled:opacity-50" disabled>
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </button>
+                    <button id="processBtn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:hover:bg-blue-600" disabled>
+                        <i class="fas fa-cog mr-2"></i>Process
+                    </button>
+                </div>
+            </section>
+
+            <!-- Progress Section (Hidden by default) -->
+            <section id="progress-section" class="hidden p-8 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Processing Your CV</h2>
+                
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex justify-between mb-2">
+                        <span>Extracting data...</span>
+                        <span id="progress-percent">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="progress-bar" class="progress-bar bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                    
+                    <div id="processing-steps" class="mt-8 space-y-4">
+                        <div class="flex items-center text-gray-600 processing-step">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 mr-4">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <span>Reading file content...</span>
+                        </div>
+                        <div class="flex items-center text-gray-600 processing-step">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 mr-4">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <span>Extracting key sections...</span>
+                        </div>
+                        <div class="flex items-center text-gray-600 processing-step">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 mr-4">
+                                <i class="fas fa-paint-brush"></i>
+                            </div>
+                            <span>Formatting to company template...</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section (Hidden by default) -->
+            <section id="results-section" class="hidden p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-800">Your Company CV</h2>
+                    <button id="downloadBtn" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                        <i class="fas fa-download mr-2"></i>Download PDF
+                    </button>
+                </div>
+                
+                <!-- Preview Container -->
+                <div class="max-w-3xl mx-auto bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                    <!-- Preview Header -->
+                    <div class="bg-blue-800 text-white p-6">
+                        <h3 id="preview-position" class="text-2xl font-bold">SOFTWARE ENGINEER</h3>
+                        <p id="preview-name" class="text-xl mt-1">John Doe</p>
+                    </div>
+                    
+                    <!-- Preview Content -->
+                    <div class="p-6">
+                        <!-- Summary -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">PROFESSIONAL SUMMARY</h4>
+                            <p id="preview-summary" class="text-gray-700">Experienced software engineer with 5+ years in full-stack development. Specialized in JavaScript frameworks and cloud architectures. Passionate about building scalable solutions that drive business growth.</p>
+                        </div>
+                        
+                        <!-- Expertise & Skills -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">SKILLS & EXPERTISE</h4>
+                            <div id="preview-skills" class="flex flex-wrap gap-2">
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">JavaScript</span>
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">React</span>
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Node.js</span>
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">AWS</span>
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Python</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Experience -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">PROFESSIONAL EXPERIENCE</h4>
+                            <div id="preview-experience">
+                                <div class="mb-4">
+                                    <h5 class="font-medium text-gray-800">Senior Developer - ABC Tech</h5>
+                                    <p class="text-sm text-gray-600">Jan 2020 - Present</p>
+                                    <ul class="list-disc pl-5 text-gray-700 mt-2 space-y-1">
+                                        <li>Led a team of 5 developers to redesign the core platform</li>
+                                        <li>Implemented CI/CD pipelines reducing deployment time by 60%</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Education -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">EDUCATION</h4>
+                            <div id="preview-education">
+                                <h5 class="font-medium text-gray-800">Master of Computer Science - University of XYZ</h5>
+                                <p class="text-sm text-gray-600">2014 - 2016</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Sections -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">CERTIFICATIONS</h4>
+                                <div id="preview-certifications" class="text-gray-700">
+                                    <p>AWS Certified Developer</p>
+                                    <p>Google Cloud Professional</p>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">LANGUAGES</h4>
+                                <div id="preview-languages" class="text-gray-700">
+                                    <p>English (Fluent)</p>
+                                    <p>French (Intermediate)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Actions -->
+                <div class="flex justify-center mt-8">
+                    <button id="newCvBtn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-file-import mr-2"></i>Convert Another CV
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            <p>© 2023 Company Name. All rights reserved.</p>
+            <p class="mt-1">This tool converts your personal CV to our company's standardized format.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const processBtn = document.getElementById('processBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const newCvBtn = document.getElementById('newCvBtn');
+            const uploadSection = document.getElementById('upload-section');
+            const progressSection = document.getElementById('progress-section');
+            const resultsSection = document.getElementById('results-section');
+            const progressBar = document.getElementById('progress-bar');
+            const progressPercent = document.getElementById('progress-percent');
+            const processingSteps = document.querySelectorAll('.processing-step');
+            
+            let currentFile = null;
+            
+            // Handle drag over
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+            
+            // Handle drag leave
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+            
+            // Handle drop
+            dropZone.addEventListener('drop', handleDrop, false);
+            
+            // Handle file selection via click
+            fileInput.addEventListener('change', function(e) {
+                if (this.files.length) {
+                    handleFiles(this.files);
+                }
+            });
+            
+            // Process button click
+            processBtn.addEventListener('click', processCv);
+            
+            // Cancel button click
+            cancelBtn.addEventListener('click', resetForm);
+            
+            // Download button click
+            downloadBtn.addEventListener('click', function() {
+                alert('In a real implementation, this would download the processed PDF file.');
+                // In a real app, this would trigger a download of the processed PDF
+            });
+            
+            // New CV button click
+            newCvBtn.addEventListener('click', resetForm);
+            
+            function highlight(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.add('active');
+            }
+            
+            function unhighlight(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.remove('active');
+            }
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            }
+            
+            function handleFiles(files) {
+                if (files.length > 1) {
+                    alert('Please upload only one file at a time.');
+                    return;
+                }
+                
+                const file = files[0];
+                const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+                
+                if (!validTypes.includes(file.type) && !file.name.match(/\.(pdf|doc|docx)$/i)) {
+                    alert('Please upload a valid file type (.pdf, .doc, .docx)');
+                    return;
+                }
+                
+                currentFile = file;
+                cancelBtn.disabled = false;
+                processBtn.disabled = false;
+                
+                // Update UI to show selected file
+                const fileNameElement = document.createElement('p');
+                fileNameElement.className = 'mt-4 font-medium text-green-700';
+                fileNameElement.innerHTML = `<i class="fas fa-check-circle mr-2"></i> ${file.name} (${formatFileSize(file.size)})`;
+                
+                // Remove any existing file name displays
+                const existingFileDisplay = dropZone.querySelector('.file-selected');
+                if (existingFileDisplay) {
+                    dropZone.removeChild(existingFileDisplay);
+                }
+                
+                fileNameElement.classList.add('file-selected');
+                dropZone.appendChild(fileNameElement);
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            function processCv() {
+                if (!currentFile) return;
+                
+                // UI changes
+                uploadSection.style.display = 'none';
+                progressSection.style.display = 'block';
+                resultsSection.style.display = 'none';
+                
+                // Simulate processing with progress updates
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    if (progress > 100) progress = 100;
+                    
+                    progressBar.style.width = `${progress}%`;
+                    progressPercent.textContent = `${Math.round(progress)}%`;
+                    
+                    // Update processing steps
+                    if (progress > 30) {
+                        processingSteps[0].classList.add('text-green-600');
+                        processingSteps[0].querySelector('div').className = 'w-8 h-8 rounded-full flex items-center justify-center bg-green-100 text-green-600 mr-4';
+                        processingSteps[0].querySelector('i').className = 'fas fa-check';
+                    }
+                    
+                    if (progress > 60) {
+                        processingSteps[1].classList.add('text-green-600');
+                        processingSteps[1].querySelector('div').className = 'w-8 h-8 rounded-full flex items-center justify-center bg-green-100 text-green-600 mr-4';
+                        processingSteps[1].querySelector('i').className = 'fas fa-check';
+                    }
+                    
+                    if (progress > 85) {
+                        processingSteps[2].classList.add('text-green-600');
+                        processingSteps[2].querySelector('div').className = 'w-8 h-8 rounded-full flex items-center justify-center bg-green-100 text-green-600 mr-4';
+                        processingSteps[2].querySelector('i').className = 'fas fa-check';
+                    }
+                    
+                    if (progress === 100) {
+                        clearInterval(interval);
+                        setTimeout(showResults, 500);
+                    }
+                }, 300);
+            }
+            
+            function showResults() {
+                progressSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+                
+                // In a real app, this would be populated with data extracted from the CV
+                // For this demo, we're using placeholder data
+                document.getElementById('preview-position').textContent = 'SENIOR SOFTWARE ENGINEER';
+                document.getElementById('preview-name').textContent = 'JOHN DOE';
+                document.getElementById('preview-summary').textContent = 'Experienced software engineer with 8+ years in full-stack development. Specialized in JavaScript frameworks and cloud architectures. Passionate about building scalable solutions that drive business growth.';
+                
+                const skillsContainer = document.getElementById('preview-skills');
+                skillsContainer.innerHTML = '';
+                ['JavaScript', 'TypeScript', 'React', 'Node.js', 'AWS', 'Docker', 'Python', 'SQL'].forEach(skill => {
+                    const skillEl = document.createElement('span');
+                    skillEl.className = 'bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm';
+                    skillEl.textContent = skill;
+                    skillsContainer.appendChild(skillEl);
+                });
+                
+                const experienceContainer = document.getElementById('preview-experience');
+                experienceContainer.innerHTML = `
+                    <div class="mb-4">
+                        <h5 class="font-medium text-gray-800">Senior Software Engineer - TechCorp Inc.</h5>
+                        <p class="text-sm text-gray-600">Jan 2020 - Present</p>
+                        <ul class="list-disc pl-5 text-gray-700 mt-2 space-y-1">
+                            <li>Led a team of 8 developers in redesigning the core customer platform</li>
+                            <li>Implemented CI/CD pipelines reducing deployment time by 70%</li>
+                            <li>Architected microservices solution improving system reliability by 40%</li>
+                        </ul>
+                    </div>
+                    <div class="mb-4">
+                        <h5 class="font-medium text-gray-800">Software Engineer - DevSolutions</h5>
+                        <p class="text-sm text-gray-600">Jun 2016 - Dec 2019</p>
+                        <ul class="list-disc pl-5 text-gray-700 mt-2 space-y-1">
+                            <li>Developed new features for the flagship product using React and Node.js</li>
+                            <li>Optimized database queries improving response times by 35%</li>
+                            <li>Mentored 3 junior developers</li>
+                        </ul>
+                    </div>
+                `;
+                
+                document.getElementById('preview-education').innerHTML = `
+                    <h5 class="font-medium text-gray-800">Master of Computer Science - State University</h5>
+                    <p class="text-sm text-gray-600">2012 - 2014</p>
+                    <h5 class="font-medium text-gray-800 mt-2">Bachelor of Science in Computer Engineering - State University</h5>
+                    <p class="text-sm text-gray-600">2008 - 2012</p>
+                `;
+                
+                document.getElementById('preview-certifications').innerHTML = `
+                    <p>AWS Certified Solutions Architect</p>
+                    <p>Google Cloud Professional Engineer</p>
+                    <p>Oracle Certified Professional</p>
+                `;
+                
+                document.getElementById('preview-languages').innerHTML = `
+                    <p>English (Native)</p>
+                    <p>Spanish (Fluent)</p>
+                    <p>French (Intermediate)</p>
+                `;
+            }
+            
+            function resetForm() {
+                currentFile = null;
+                fileInput.value = '';
+                cancelBtn.disabled = true;
+                processBtn.disabled = true;
+                
+                // Reset progress
+                progressBar.style.width = '0%';
+                progressPercent.textContent = '0%';
+                processingSteps.forEach(step => {
+                    step.classList.remove('text-green-600');
+                    step.querySelector('div').className = 'w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 mr-4';
+                    step.querySelector('i').className = step.querySelector('i').className.replace('fa-check', 'fa-search');
+                });
+                
+                // Remove file name display
+                const fileDisplay = dropZone.querySelector('.file-selected');
+                if (fileDisplay) {
+                    dropZone.removeChild(fileDisplay);
+                }
+                
+                // Show upload section
+                uploadSection.style.display = 'block';
+                progressSection.style.display = 'none';
+                resultsSection.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
