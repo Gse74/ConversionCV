@@ -249,7 +249,8 @@
             downloadBtn.addEventListener('click', function() {
                 const element = document.getElementById('cvPreview');
                 const options = {
-                    margin:       0.5,
+                    // Margin converted from 0.5 inches to millimeters
+                    margin:       12.7,
                     filename:     'converted_cv.pdf',
                     image:        { type: 'jpeg', quality: 0.98 },
                     html2canvas:  { scale: 2 },
