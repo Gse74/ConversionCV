@@ -19,3 +19,15 @@ Ces dépendances sont chargées via leur CDN et ne nécessitent pas d'installati
 
 ## Exécution ou déploiement
 Pour exécuter la page en local, ouvrez simplement le fichier HTML dans un navigateur moderne. Pour un déploiement en ligne, placez le fichier sur n'importe quel serveur web statique (par exemple GitHub Pages) car aucun backend n'est requis.
+
+## Configuration du webhook
+Avant un déploiement réel, la valeur `WEBHOOK_URL` dans `CV Conversion Tool.html`
+doit être remplacée par l'URL de votre webhook. Un petit script `configure.sh`
+est fourni pour automatiser cette étape :
+
+```sh
+WEBHOOK_URL="https://exemple.com/mon-webhook" ./configure.sh
+```
+
+Le script insère l'URL dans le fichier HTML en place afin qu'elle soit utilisée
+lors de l'envoi du fichier converti.
