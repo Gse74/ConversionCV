@@ -6,6 +6,8 @@
     <title>CV Conversion Tool</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Library used to read PDF content for data extraction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.10.111/pdf.min.js"></script>
     <style>
         .drop-zone {
             border: 2px dashed #3b82f6;
@@ -208,8 +210,10 @@
             const progressBar = document.getElementById('progress-bar');
             const progressPercent = document.getElementById('progress-percent');
             const processingSteps = document.querySelectorAll('.processing-step');
-            
+
             let currentFile = null;
+            // Will hold the information parsed from the uploaded CV
+            let extractedData = {};
             
             // Handle drag over
             ['dragenter', 'dragover'].forEach(eventName => {
@@ -307,12 +311,20 @@
             
             function processCv() {
                 if (!currentFile) return;
-                
+
                 // UI changes
                 uploadSection.style.display = 'none';
                 progressSection.style.display = 'block';
                 resultsSection.style.display = 'none';
-                
+
+                // Start extracting data asynchronously
+                extractedData = {};
+                extractCvData(currentFile).then(data => {
+                    extractedData = data;
+                }).catch(err => {
+                    console.error('CV extraction failed', err);
+                });
+
                 // Simulate processing with progress updates
                 let progress = 0;
                 const interval = setInterval(() => {
@@ -347,20 +359,79 @@
                     }
                 }, 300);
             }
+
+            async function extractCvData(file) {
+                if (!file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf')) {
+                    return {};
+                }
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                let text = '';
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const content = await page.getTextContent();
+                    text += content.items.map(item => item.str).join(' ') + '\n';
+                }
+                return parseCvText(text);
+            }
+
+            function parseCvText(text) {
+                const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+                const data = {
+                    name: lines[0] || '',
+                    position: lines[1] || '',
+                    summary: lines.slice(2, 6).join(' '),
+                    skills: [],
+                    experiences: [],
+                    education: [],
+                    certifications: [],
+                    languages: []
+                };
+
+                const lowerLines = lines.map(l => l.toLowerCase());
+
+                let idx = lowerLines.findIndex(l => l.includes('skill'));
+                if (idx !== -1) {
+                    for (let i = idx + 1; i < lines.length && i < idx + 5; i++) {
+                        if (!lines[i]) continue;
+                        data.skills.push(...lines[i].split(/[,;•]/).map(s => s.trim()).filter(Boolean));
+                    }
+                }
+
+                idx = lowerLines.findIndex(l => l.includes('experience'));
+                if (idx !== -1) {
+                    const block = [];
+                    for (let i = idx + 1; i < lines.length && block.length < 8; i++) {
+                        block.push(lines[i]);
+                    }
+                    if (block.length) {
+                        data.experiences.push({ title: block[0], company: '', dates: '', details: block.slice(1) });
+                    }
+                }
+
+                idx = lowerLines.findIndex(l => l.includes('education'));
+                if (idx !== -1) {
+                    for (let i = idx + 1; i < lines.length && data.education.length < 2; i++) {
+                        if (!lines[i]) continue;
+                        data.education.push({ degree: lines[i], period: '' });
+                    }
+                }
+
+                return data;
+            }
             
             function showResults() {
                 progressSection.style.display = 'none';
                 resultsSection.style.display = 'block';
-                
-                // In a real app, this would be populated with data extracted from the CV
-                // For this demo, we're using placeholder data
-                document.getElementById('preview-position').textContent = 'SENIOR SOFTWARE ENGINEER';
-                document.getElementById('preview-name').textContent = 'JOHN DOE';
-                document.getElementById('preview-summary').textContent = 'Experienced software engineer with 8+ years in full-stack development. Specialized in JavaScript frameworks and cloud architectures. Passionate about building scalable solutions that drive business growth.';
-                
+
+                // Apply extracted information to the preview
+                document.getElementById('preview-position').textContent = (extractedData.position || '').toUpperCase();
+                document.getElementById('preview-name').textContent = extractedData.name || '';
+                document.getElementById('preview-summary').textContent = extractedData.summary || '';
+
                 const skillsContainer = document.getElementById('preview-skills');
                 skillsContainer.innerHTML = '';
-                ['JavaScript', 'TypeScript', 'React', 'Node.js', 'AWS', 'Docker', 'Python', 'SQL'].forEach(skill => {
+                (extractedData.skills || []).forEach(skill => {
                     const skillEl = document.createElement('span');
                     skillEl.className = 'bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm';
                     skillEl.textContent = skill;
@@ -368,45 +439,47 @@
                 });
                 
                 const experienceContainer = document.getElementById('preview-experience');
-                experienceContainer.innerHTML = `
-                    <div class="mb-4">
-                        <h5 class="font-medium text-gray-800">Senior Software Engineer - TechCorp Inc.</h5>
-                        <p class="text-sm text-gray-600">Jan 2020 - Present</p>
-                        <ul class="list-disc pl-5 text-gray-700 mt-2 space-y-1">
-                            <li>Led a team of 8 developers in redesigning the core customer platform</li>
-                            <li>Implemented CI/CD pipelines reducing deployment time by 70%</li>
-                            <li>Architected microservices solution improving system reliability by 40%</li>
-                        </ul>
-                    </div>
-                    <div class="mb-4">
-                        <h5 class="font-medium text-gray-800">Software Engineer - DevSolutions</h5>
-                        <p class="text-sm text-gray-600">Jun 2016 - Dec 2019</p>
-                        <ul class="list-disc pl-5 text-gray-700 mt-2 space-y-1">
-                            <li>Developed new features for the flagship product using React and Node.js</li>
-                            <li>Optimized database queries improving response times by 35%</li>
-                            <li>Mentored 3 junior developers</li>
-                        </ul>
-                    </div>
-                `;
-                
-                document.getElementById('preview-education').innerHTML = `
-                    <h5 class="font-medium text-gray-800">Master of Computer Science - State University</h5>
-                    <p class="text-sm text-gray-600">2012 - 2014</p>
-                    <h5 class="font-medium text-gray-800 mt-2">Bachelor of Science in Computer Engineering - State University</h5>
-                    <p class="text-sm text-gray-600">2008 - 2012</p>
-                `;
-                
-                document.getElementById('preview-certifications').innerHTML = `
-                    <p>AWS Certified Solutions Architect</p>
-                    <p>Google Cloud Professional Engineer</p>
-                    <p>Oracle Certified Professional</p>
-                `;
-                
-                document.getElementById('preview-languages').innerHTML = `
-                    <p>English (Native)</p>
-                    <p>Spanish (Fluent)</p>
-                    <p>French (Intermediate)</p>
-                `;
+                experienceContainer.innerHTML = '';
+                (extractedData.experiences || []).forEach(exp => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'mb-4';
+                    const title = document.createElement('h5');
+                    title.className = 'font-medium text-gray-800';
+                    title.textContent = `${exp.title || ''}${exp.company ? ' - ' + exp.company : ''}`.trim();
+                    const date = document.createElement('p');
+                    date.className = 'text-sm text-gray-600';
+                    date.textContent = exp.dates || '';
+                    wrapper.appendChild(title);
+                    wrapper.appendChild(date);
+                    const ul = document.createElement('ul');
+                    ul.className = 'list-disc pl-5 text-gray-700 mt-2 space-y-1';
+                    (exp.details || []).forEach(d => {
+                        const li = document.createElement('li');
+                        li.textContent = d;
+                        ul.appendChild(li);
+                    });
+                    wrapper.appendChild(ul);
+                    experienceContainer.appendChild(wrapper);
+                });
+
+                const eduContainer = document.getElementById('preview-education');
+                eduContainer.innerHTML = '';
+                (extractedData.education || []).forEach(ed => {
+                    const title = document.createElement('h5');
+                    title.className = 'font-medium text-gray-800';
+                    title.textContent = ed.degree || '';
+                    const date = document.createElement('p');
+                    date.className = 'text-sm text-gray-600';
+                    date.textContent = ed.period || '';
+                    eduContainer.appendChild(title);
+                    eduContainer.appendChild(date);
+                });
+
+                document.getElementById('preview-certifications').innerHTML =
+                    (extractedData.certifications || []).map(c => `<p>${c}</p>`).join('');
+
+                document.getElementById('preview-languages').innerHTML =
+                    (extractedData.languages || []).map(l => `<p>${l}</p>`).join('');
             }
             
             function resetForm() {
