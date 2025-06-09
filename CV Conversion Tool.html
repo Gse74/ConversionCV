@@ -274,14 +274,19 @@
                     const formData = new FormData();
                     formData.append('file', currentFile);
 
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 60000);
+
                     const response = await fetch('https://hook.eu2.make.com/112mni28n0s93vceky8vztwctdf2avyc', {
                         method: 'POST',
-                        body: formData
+                        body: formData,
+                        signal: controller.signal
                     });
 
                     if (!response.ok) throw new Error('Upload failed');
                     const blob = await response.blob();
 
+                    clearTimeout(timeoutId);
                     clearInterval(interval);
                     progressBar.style.width = '100%';
                     progressPercent.textContent = '100%';
@@ -289,7 +294,11 @@
                     await displayPdf(blob);
                 } catch (err) {
                     clearInterval(interval);
-                    alert('An error occurred while processing your CV.');
+                    if (err.name === 'AbortError') {
+                        alert('Processing timed out.');
+                    } else {
+                        alert('An error occurred while processing your CV.');
+                    }
                     resetForm();
                 }
             }
