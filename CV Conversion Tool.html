@@ -43,21 +43,21 @@
                 <h2 class="text-2xl font-semibold text-gray-800 mb-6">Upload Your CV</h2>
                 <p class="text-gray-600 mb-6">Supported formats: .doc, .docx, .pdf</p>
                 
-                <div class="drop-zone rounded-lg p-12 text-center cursor-pointer mb-6 relative" 
-                     id="dropZone">
-                    <i class="fas fa-file-upload text-5xl text-blue-500 mb-4"></i>
+                <div class="drop-zone rounded-lg p-12 text-center cursor-pointer mb-6 relative"
+                     id="dropZone" role="button" tabindex="0" aria-label="Upload CV file">
+                    <i class="fas fa-file-upload text-5xl text-blue-500 mb-4" aria-hidden="true"></i>
                     <p class="text-lg font-medium text-gray-700">Drag & drop your CV file here</p>
                     <p class="text-gray-500 mt-2">or click to browse files</p>
-                    <input type="file" id="fileInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
-                           accept=".doc,.docx,.pdf" />
+                    <input type="file" id="fileInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                           accept=".doc,.docx,.pdf" aria-label="Select CV file" />
                 </div>
                 
                 <div class="flex justify-center space-x-4">
-                    <button id="cancelBtn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors disabled:opacity-50" disabled>
-                        <i class="fas fa-times mr-2"></i>Cancel
+                    <button id="cancelBtn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors disabled:opacity-50" disabled aria-label="Cancel upload">
+                        <i class="fas fa-times mr-2" aria-hidden="true"></i>Cancel
                     </button>
-                    <button id="processBtn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:hover:bg-blue-600" disabled>
-                        <i class="fas fa-cog mr-2"></i>Process
+                    <button id="processBtn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:hover:bg-blue-600" disabled aria-label="Process CV">
+                        <i class="fas fa-cog mr-2" aria-hidden="true"></i>Process
                     </button>
                 </div>
             </section>
@@ -78,19 +78,19 @@
                     <div id="processing-steps" class="mt-8 space-y-4">
                         <div class="flex items-center text-gray-600 processing-step">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 mr-4">
-                                <i class="fas fa-search"></i>
+                                <i class="fas fa-search" aria-hidden="true"></i>
                             </div>
                             <span>Reading file content...</span>
                         </div>
                         <div class="flex items-center text-gray-600 processing-step">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 mr-4">
-                                <i class="fas fa-code"></i>
+                                <i class="fas fa-code" aria-hidden="true"></i>
                             </div>
                             <span>Extracting key sections...</span>
                         </div>
                         <div class="flex items-center text-gray-600 processing-step">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 mr-4">
-                                <i class="fas fa-paint-brush"></i>
+                                <i class="fas fa-paint-brush" aria-hidden="true"></i>
                             </div>
                             <span>Formatting to company template...</span>
                         </div>
@@ -102,8 +102,8 @@
             <section id="results-section" class="hidden p-8">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-semibold text-gray-800">Your Company CV</h2>
-                    <button id="downloadBtn" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-                        <i class="fas fa-download mr-2"></i>Download PDF
+                    <button id="downloadBtn" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors" aria-label="Download processed CV">
+                        <i class="fas fa-download mr-2" aria-hidden="true"></i>Download PDF
                     </button>
                 </div>
                 
@@ -181,8 +181,8 @@
                 
                 <!-- Actions -->
                 <div class="flex justify-center mt-8">
-                    <button id="newCvBtn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-file-import mr-2"></i>Convert Another CV
+                    <button id="newCvBtn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" aria-label="Convert another CV">
+                        <i class="fas fa-file-import mr-2" aria-hidden="true"></i>Convert Another CV
                     </button>
                 </div>
             </section>
@@ -293,7 +293,7 @@
                 // Update UI to show selected file
                 const fileNameElement = document.createElement('p');
                 fileNameElement.className = 'mt-4 font-medium text-green-700';
-                fileNameElement.innerHTML = `<i class="fas fa-check-circle mr-2"></i> ${file.name} (${formatFileSize(file.size)})`;
+                fileNameElement.innerHTML = `<i class="fas fa-check-circle mr-2" aria-hidden="true"></i> ${file.name} (${formatFileSize(file.size)})`;
                 
                 // Remove any existing file name displays
                 const existingFileDisplay = dropZone.querySelector('.file-selected');
