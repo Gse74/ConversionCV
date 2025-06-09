@@ -19,3 +19,6 @@ Ces dépendances sont chargées via leur CDN et ne nécessitent pas d'installati
 
 ## Exécution ou déploiement
 Pour exécuter la page en local, ouvrez simplement le fichier HTML dans un navigateur moderne. Pour un déploiement en ligne, placez le fichier sur n'importe quel serveur web statique (par exemple GitHub Pages) car aucun backend n'est requis.
+
+## Licence
+Ce projet est distribué sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
