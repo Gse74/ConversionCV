@@ -11,6 +11,16 @@ L'utilisateur télécharge son CV au format PDF ou Word. Le fichier est envoyé 
 - [Font Awesome](https://cdnjs.cloudflare.com/ajax/libs/font-awesome) pour les icônes.
 Ces dépendances sont chargées via leur CDN et ne nécessitent pas d'installation locale.
 
+## Utilisation de Tailwind CSS en production
+Le CDN `tailwindcss.com` est pratique pour le développement et le prototypage, mais il ne doit pas être utilisé en production. Pour obtenir une feuille de style optimisée, générez votre CSS via PostCSS ou le CLI :
+
+```bash
+npm install -D tailwindcss
+npx tailwindcss -i ./src/input.css -o ./dist/output.css --minify
+```
+
+Consultez [la documentation officielle](https://tailwindcss.com/docs/installation) pour plus de détails.
+
 ## Procédure d'utilisation
 1. Ouvrez le fichier `CV Conversion Tool.html` dans votre navigateur.
 2. Glissez-déposez votre CV ou sélectionnez-le via le bouton proposé.
