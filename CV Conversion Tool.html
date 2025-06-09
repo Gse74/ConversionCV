@@ -6,6 +6,7 @@
     <title>CV Conversion Tool</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     <style>
         .drop-zone {
@@ -108,74 +109,56 @@
                 </div>
                 
                 <!-- Preview Container -->
-                <div id="cvPreview" class="max-w-3xl mx-auto bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                <div id="cvPreview" class="max-w-3xl mx-auto border rounded-lg overflow-hidden shadow-sm">
                     <!-- Preview Header -->
-                    <div class="bg-blue-800 text-white p-6">
-                        <h3 id="preview-position" class="text-2xl font-bold">SOFTWARE ENGINEER</h3>
-                        <p id="preview-name" class="text-xl mt-1">John Doe</p>
+                    <div class="cv-header">
+                        <h3 id="preview-name">John Doe</h3>
+                        <p id="preview-position">SOFTWARE ENGINEER</p>
                     </div>
-                    
-                    <!-- Preview Content -->
-                    <div class="p-6">
-                        <!-- Summary -->
-                        <div class="mb-6">
-                            <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">PROFESSIONAL SUMMARY</h4>
-                            <p id="preview-summary" class="text-gray-700">Experienced software engineer with 5+ years in full-stack development. Specialized in JavaScript frameworks and cloud architectures. Passionate about building scalable solutions that drive business growth.</p>
-                        </div>
-                        
-                        <!-- Expertise & Skills -->
-                        <div class="mb-6">
-                            <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">SKILLS & EXPERTISE</h4>
-                            <div id="preview-skills" class="flex flex-wrap gap-2">
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">JavaScript</span>
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">React</span>
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Node.js</span>
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">AWS</span>
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Python</span>
+
+                    <!-- Preview Content with sidebar -->
+                    <div class="cv-main">
+                        <aside class="cv-sidebar">
+                            <h4 class="cv-section-title">SKILLS & EXPERTISE</h4>
+                            <div id="preview-skills" class="flex flex-wrap gap-2 text-sm mb-4">
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">JavaScript</span>
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">React</span>
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Node.js</span>
                             </div>
-                        </div>
-                        
-                        <!-- Experience -->
-                        <div class="mb-6">
-                            <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">PROFESSIONAL EXPERIENCE</h4>
-                            <div id="preview-experience">
+                            <h4 class="cv-section-title">CERTIFICATIONS</h4>
+                            <div id="preview-certifications" class="text-sm mb-4">
+                                <p>AWS Certified Developer</p>
+                                <p>Google Cloud Professional</p>
+                            </div>
+                            <h4 class="cv-section-title">LANGUAGES</h4>
+                            <div id="preview-languages" class="text-sm">
+                                <p>English (Fluent)</p>
+                                <p>French (Intermediate)</p>
+                            </div>
+                        </aside>
+
+                        <section class="cv-content">
+                            <h4 class="cv-section-title">PROFESSIONAL SUMMARY</h4>
+                            <p id="preview-summary" class="mb-4 text-sm">Experienced software engineer with 5+ years in full-stack development. Specialized in JavaScript frameworks and cloud architectures. Passionate about building scalable solutions that drive business growth.</p>
+
+                            <h4 class="cv-section-title">PROFESSIONAL EXPERIENCE</h4>
+                            <div id="preview-experience" class="mb-4">
                                 <div class="mb-4">
-                                    <h5 class="font-medium text-gray-800">Senior Developer - ABC Tech</h5>
-                                    <p class="text-sm text-gray-600">Jan 2020 - Present</p>
-                                    <ul class="list-disc pl-5 text-gray-700 mt-2 space-y-1">
+                                    <h5 class="font-medium">Senior Developer - ABC Tech</h5>
+                                    <p class="text-sm">Jan 2020 - Present</p>
+                                    <ul class="list-disc pl-5 text-sm mt-1 space-y-1">
                                         <li>Led a team of 5 developers to redesign the core platform</li>
                                         <li>Implemented CI/CD pipelines reducing deployment time by 60%</li>
                                     </ul>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <!-- Education -->
-                        <div class="mb-6">
-                            <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">EDUCATION</h4>
-                            <div id="preview-education">
-                                <h5 class="font-medium text-gray-800">Master of Computer Science - University of XYZ</h5>
-                                <p class="text-sm text-gray-600">2014 - 2016</p>
+
+                            <h4 class="cv-section-title">EDUCATION</h4>
+                            <div id="preview-education" class="mb-4 text-sm">
+                                <h5 class="font-medium">Master of Computer Science - University of XYZ</h5>
+                                <p>2014 - 2016</p>
                             </div>
-                        </div>
-                        
-                        <!-- Additional Sections -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">CERTIFICATIONS</h4>
-                                <div id="preview-certifications" class="text-gray-700">
-                                    <p>AWS Certified Developer</p>
-                                    <p>Google Cloud Professional</p>
-                                </div>
-                            </div>
-                            <div>
-                                <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">LANGUAGES</h4>
-                                <div id="preview-languages" class="text-gray-700">
-                                    <p>English (Fluent)</p>
-                                    <p>French (Intermediate)</p>
-                                </div>
-                            </div>
-                        </div>
+                        </section>
                     </div>
                 </div>
                 
@@ -246,7 +229,7 @@
                     filename:     'converted_cv.pdf',
                     image:        { type: 'jpeg', quality: 0.98 },
                     html2canvas:  { scale: 2 },
-                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
                 html2pdf().set(options).from(element).save();
             });

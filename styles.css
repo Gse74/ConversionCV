@@ -1,0 +1,9 @@
+body { font-family: Arial, sans-serif; }
+#cvPreview { border: 1px solid #ccc; }
+.cv-header { background-color: #d32f2f; color: white; padding: 1rem; }
+.cv-header h3 { font-size: 1.5rem; font-weight: bold; }
+.cv-header p { font-size: 1rem; }
+.cv-main { display: flex; }
+.cv-sidebar { background-color: #f7f7f7; width: 30%; padding: 1rem; }
+.cv-content { width: 70%; padding: 1rem; }
+.cv-section-title { color: #d32f2f; font-weight: bold; margin-bottom: 0.5rem; border-bottom: 1px solid #ccc; }
