@@ -34,7 +34,7 @@
             background-color: #00305a;
             color: white;
         }
-        #cvPreview .sidebar h3 {
+        #cvPreview .sidebar h4 {
             color: #ffffff;
         }
         #cvPreview .section-title {
@@ -124,11 +124,23 @@
                 
                 <!-- Preview Container -->
                 <div id="cvPreview" class="max-w-3xl mx-auto border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                    <!-- Header -->
+                    <div class="flex justify-between items-center p-6 text-white" style="background-color:#00305a;">
+                        <div>
+                            <h3 id="preview-name" class="text-3xl font-bold">John Doe</h3>
+                            <p id="preview-position" class="text-lg">SOFTWARE ENGINEER</p>
+                        </div>
+                        <div class="text-right font-bold text-2xl">Itecor</div>
+                    </div>
                     <div class="grid grid-cols-3">
                         <!-- Sidebar -->
                         <div class="sidebar p-6 col-span-1">
-                            <h3 id="preview-name" class="text-2xl font-bold mb-2">John Doe</h3>
-                            <p id="preview-position" class="text-lg mb-6">SOFTWARE ENGINEER</p>
+                            <h4 class="font-semibold mb-2">CONTACT</h4>
+                            <ul id="preview-contact" class="text-sm mb-6 space-y-1">
+                                <li><i class="fas fa-envelope mr-2" aria-hidden="true"></i>john.doe@example.com</li>
+                                <li><i class="fas fa-phone mr-2" aria-hidden="true"></i>+1 234 567 890</li>
+                                <li><i class="fas fa-map-marker-alt mr-2" aria-hidden="true"></i>New York, USA</li>
+                            </ul>
                             <h4 class="font-semibold mb-2">SKILLS</h4>
                             <div id="preview-skills" class="text-sm space-y-1"></div>
                         </div>
@@ -373,6 +385,12 @@
                 document.getElementById('preview-position').textContent = 'SENIOR SOFTWARE ENGINEER';
                 document.getElementById('preview-name').textContent = 'JOHN DOE';
                 document.getElementById('preview-summary').textContent = 'Experienced software engineer with 8+ years in full-stack development. Specialized in JavaScript frameworks and cloud architectures. Passionate about building scalable solutions that drive business growth.';
+
+                document.getElementById('preview-contact').innerHTML = `
+                    <li><i class="fas fa-envelope mr-2" aria-hidden="true"></i>john.doe@example.com</li>
+                    <li><i class="fas fa-phone mr-2" aria-hidden="true"></i>+1 234 567 890</li>
+                    <li><i class="fas fa-map-marker-alt mr-2" aria-hidden="true"></i>New York, USA</li>
+                `;
                 
                 const skillsContainer = document.getElementById('preview-skills');
                 skillsContainer.innerHTML = '';
