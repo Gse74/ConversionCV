@@ -4,7 +4,7 @@
 ConversionCV est une page web permettant de transformer un CV personnel en un format normalisé.
 
 ## Fonctionnement
-L'utilisateur télécharge son CV au format PDF ou Word. La page simule un traitement en plusieurs étapes et affiche un aperçu final du CV standardisé. Aucun fichier n'est réellement envoyé : tout se déroule côté client.
+L'utilisateur télécharge son CV au format PDF ou Word. Le fichier est envoyé au webhook `https://hook.eu2.make.com/` pour être traité. La page attend ensuite la réponse du serveur afin d'afficher le PDF généré et de le proposer au téléchargement.
 
 ## Dépendances
 - [Tailwind CSS](https://cdn.tailwindcss.com) pour la mise en forme.
