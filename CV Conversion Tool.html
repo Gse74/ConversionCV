@@ -26,6 +26,21 @@
             background: white;
             padding: 0 0.25rem;
         }
+        /* Styling inspired by the Itecor CV layout */
+        #cvPreview {
+            font-family: Arial, sans-serif;
+        }
+        #cvPreview .sidebar {
+            background-color: #00305a;
+            color: white;
+        }
+        #cvPreview .sidebar h3 {
+            color: #ffffff;
+        }
+        #cvPreview .section-title {
+            color: #00305a;
+            border-bottom: 2px solid #00305a;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen font-sans">
@@ -78,19 +93,19 @@
                     <div id="processing-steps" class="mt-8 space-y-4">
                         <div class="flex items-center text-gray-600 processing-step">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 mr-4">
-                                <i class="fas fa-search" aria-hidden="true"></i>
+                                <i class="fas fa-search" data-original="fa-search" aria-hidden="true"></i>
                             </div>
                             <span>Reading file content...</span>
                         </div>
                         <div class="flex items-center text-gray-600 processing-step">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 mr-4">
-                                <i class="fas fa-code" aria-hidden="true"></i>
+                                <i class="fas fa-code" data-original="fa-code" aria-hidden="true"></i>
                             </div>
                             <span>Extracting key sections...</span>
                         </div>
                         <div class="flex items-center text-gray-600 processing-step">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 mr-4">
-                                <i class="fas fa-paint-brush" aria-hidden="true"></i>
+                                <i class="fas fa-paint-brush" data-original="fa-paint-brush" aria-hidden="true"></i>
                             </div>
                             <span>Formatting to company template...</span>
                         </div>
@@ -108,71 +123,63 @@
                 </div>
                 
                 <!-- Preview Container -->
-                <div id="cvPreview" class="max-w-3xl mx-auto bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm">
-                    <!-- Preview Header -->
-                    <div class="bg-blue-800 text-white p-6">
-                        <h3 id="preview-position" class="text-2xl font-bold">SOFTWARE ENGINEER</h3>
-                        <p id="preview-name" class="text-xl mt-1">John Doe</p>
-                    </div>
-                    
-                    <!-- Preview Content -->
-                    <div class="p-6">
-                        <!-- Summary -->
-                        <div class="mb-6">
-                            <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">PROFESSIONAL SUMMARY</h4>
-                            <p id="preview-summary" class="text-gray-700">Experienced software engineer with 5+ years in full-stack development. Specialized in JavaScript frameworks and cloud architectures. Passionate about building scalable solutions that drive business growth.</p>
+                <div id="cvPreview" class="max-w-3xl mx-auto border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                    <div class="grid grid-cols-3">
+                        <!-- Sidebar -->
+                        <div class="sidebar p-6 col-span-1">
+                            <h3 id="preview-name" class="text-2xl font-bold mb-2">John Doe</h3>
+                            <p id="preview-position" class="text-lg mb-6">SOFTWARE ENGINEER</p>
+                            <h4 class="font-semibold mb-2">SKILLS</h4>
+                            <div id="preview-skills" class="text-sm space-y-1"></div>
                         </div>
-                        
-                        <!-- Expertise & Skills -->
-                        <div class="mb-6">
-                            <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">SKILLS & EXPERTISE</h4>
-                            <div id="preview-skills" class="flex flex-wrap gap-2">
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">JavaScript</span>
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">React</span>
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Node.js</span>
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">AWS</span>
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Python</span>
+
+                        <!-- Main content -->
+                        <div class="col-span-2 p-6 space-y-6">
+                            <!-- Summary -->
+                            <div>
+                                <h4 class="section-title text-lg font-semibold pb-1 mb-2">PROFESSIONAL SUMMARY</h4>
+                                <p id="preview-summary" class="text-gray-700 text-sm">Experienced software engineer with 5+ years in full-stack development. Specialized in JavaScript frameworks and cloud architectures. Passionate about building scalable solutions that drive business growth.</p>
                             </div>
-                        </div>
-                        
-                        <!-- Experience -->
-                        <div class="mb-6">
-                            <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">PROFESSIONAL EXPERIENCE</h4>
-                            <div id="preview-experience">
-                                <div class="mb-4">
-                                    <h5 class="font-medium text-gray-800">Senior Developer - ABC Tech</h5>
-                                    <p class="text-sm text-gray-600">Jan 2020 - Present</p>
-                                    <ul class="list-disc pl-5 text-gray-700 mt-2 space-y-1">
-                                        <li>Led a team of 5 developers to redesign the core platform</li>
-                                        <li>Implemented CI/CD pipelines reducing deployment time by 60%</li>
-                                    </ul>
+
+                            <!-- Experience -->
+                            <div>
+                                <h4 class="section-title text-lg font-semibold pb-1 mb-2">PROFESSIONAL EXPERIENCE</h4>
+                                <div id="preview-experience" class="text-sm space-y-4">
+                                    <div>
+                                        <h5 class="font-medium">Senior Developer - ABC Tech</h5>
+                                        <p class="text-xs text-gray-600">Jan 2020 - Present</p>
+                                        <ul class="list-disc pl-5 mt-1 space-y-1">
+                                            <li>Led a team of 5 developers to redesign the core platform</li>
+                                            <li>Implemented CI/CD pipelines reducing deployment time by 60%</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <!-- Education -->
-                        <div class="mb-6">
-                            <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">EDUCATION</h4>
-                            <div id="preview-education">
-                                <h5 class="font-medium text-gray-800">Master of Computer Science - University of XYZ</h5>
-                                <p class="text-sm text-gray-600">2014 - 2016</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Additional Sections -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                            <!-- Education -->
                             <div>
-                                <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">CERTIFICATIONS</h4>
-                                <div id="preview-certifications" class="text-gray-700">
-                                    <p>AWS Certified Developer</p>
-                                    <p>Google Cloud Professional</p>
+                                <h4 class="section-title text-lg font-semibold pb-1 mb-2">EDUCATION</h4>
+                                <div id="preview-education" class="text-sm space-y-1">
+                                    <h5 class="font-medium">Master of Computer Science - University of XYZ</h5>
+                                    <p class="text-xs text-gray-600">2014 - 2016</p>
                                 </div>
                             </div>
-                            <div>
-                                <h4 class="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-1 mb-3">LANGUAGES</h4>
-                                <div id="preview-languages" class="text-gray-700">
-                                    <p>English (Fluent)</p>
-                                    <p>French (Intermediate)</p>
+
+                            <!-- Additional Sections -->
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <h4 class="section-title text-lg font-semibold pb-1 mb-2">CERTIFICATIONS</h4>
+                                    <div id="preview-certifications" class="space-y-1">
+                                        <p>AWS Certified Developer</p>
+                                        <p>Google Cloud Professional</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="section-title text-lg font-semibold pb-1 mb-2">LANGUAGES</h4>
+                                    <div id="preview-languages" class="space-y-1">
+                                        <p>English (Fluent)</p>
+                                        <p>French (Intermediate)</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -246,7 +253,7 @@
                     filename:     'converted_cv.pdf',
                     image:        { type: 'jpeg', quality: 0.98 },
                     html2canvas:  { scale: 2 },
-                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
                 html2pdf().set(options).from(element).save();
             });
@@ -427,9 +434,10 @@
                 progressBar.style.width = '0%';
                 progressPercent.textContent = '0%';
                 processingSteps.forEach(step => {
+                    const iconEl = step.querySelector('i');
                     step.classList.remove('text-green-600');
                     step.querySelector('div').className = 'w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 mr-4';
-                    step.querySelector('i').className = step.querySelector('i').className.replace('fa-check', 'fa-search');
+                    iconEl.className = `fas ${iconEl.dataset.original}`;
                 });
                 
                 // Remove file name display
